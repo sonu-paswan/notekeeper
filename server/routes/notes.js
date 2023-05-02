@@ -7,6 +7,13 @@ router.route('/').get((req,res)=>{
     .catch(err=>res.status(400).json(err));
 })
 
+router.route('/:id').get((req,res)=>{
+    const id= req.params.id;
+    notes.findById(id)
+    .then(particularNote=>res.json(particularNote))
+    .catch(err=>res.status(400).json(err));
+})
+
 router.route('/add').post((req,res)=>{
     const title=req.body.title;
     const content=req.body.content;
@@ -20,11 +27,20 @@ router.route('/add').post((req,res)=>{
     .catch(err=>res.status(400).json(err));
 })
 
-// router.route('/update/:id').post((req,res)=>{
-//     const title = req.body.
-//     notes.findByIdAndUpdate(req.params.id)
-//     .then()
-// })
+router.route('/update/:id').post((req,res)=>{
+    const title = req.body.title;
+    const content = req.body.content;
+    notes.findByIdAndUpdate(req.params.id)
+    .then(notes=>{
+        // console.log(notes);
+        notes.title=title;
+        notes.content=content;
+        notes.save()
+        .then(()=>res.json("successfully updated"))
+        .catch((err)=>res.json(err));
+    })
+    .catch(err=>res.json(err));
+})
 
 router.route('/delete/:id').delete((req,res)=>{
     notes.findByIdAndDelete(req.params.id)
