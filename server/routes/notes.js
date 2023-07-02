@@ -1,51 +1,113 @@
-const router = require('express').Router();
-const notes = require('../models/notes.model');
+const router = require("express").Router();
+const User = require("../models/notes.model");
+const { checkUser } = require("../middleware/authmiddleware");
 
-router.route('/').get((req,res)=>{
-    notes.find()
-    .then(docsNotes=>res.json(docsNotes))
-    .catch(err=>res.status(400).json(err));
-})
+router.route("/").get(checkUser, (req, res) => {
+  if (req.Status == true) {
+    User.findOne({ email: req.email })
+      .then((docNotes) => res.json(docNotes.notes))
+      .catch((err) => res.status(400).json(err));
+    // res.json("sucess");
+  } else {
+    res.status(400).json("error");
+  }
+});
 
-router.route('/:id').get((req,res)=>{
-    const id= req.params.id;
-    notes.findById(id)
-    .then(particularNote=>res.json(particularNote))
-    .catch(err=>res.status(400).json(err));
-})
+router.route("/:id").get(checkUser, async (req, res) => {
+  const noteId = req.params.id;
 
-router.route('/add').post((req,res)=>{
-    const title=req.body.title;
-    const content=req.body.content;
+  if (req.Status) {
+    try {
+      const user = await User.findOne({ email: req.email });
 
-    const newNote= new notes({
-        title,
-        content,
-    })
-    newNote.save()
-    .then(()=>res.json("note added"))
-    .catch(err=>res.status(400).json(err));
-})
+      if (!user) console.error("user not find");
 
-router.route('/update/:id').post((req,res)=>{
-    const title = req.body.title;
-    const content = req.body.content;
-    notes.findByIdAndUpdate(req.params.id)
-    .then(notes=>{
-        // console.log(notes);
-        notes.title=title;
-        notes.content=content;
-        notes.save()
-        .then(()=>res.json("successfully updated"))
-        .catch((err)=>res.json(err));
-    })
-    .catch(err=>res.json(err));
-})
+      const note = user.notes.id(noteId); // Find the note by noteId within the user's notes array
+      if (!note) {
+        console.error("Note not found");
+      }
+      //   console.log(note);
+      res.json(note);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
 
-router.route('/delete/:id').delete((req,res)=>{
-    notes.findByIdAndDelete(req.params.id)
-    .then(()=>res.json("note deleted!"))
-    .catch(err=>res.status(400).json(err));
-})
+router.route("/add").post(checkUser, async (req, res) => {
+  const note = {
+    title: req.body.title,
+    content: req.body.content,
+  };
+  if (req.Status) {
+    try {
+      const user = await User.findOne({ email: req.email });
+
+      if (!user) console.error("user not find");
+
+      user.notes.push(note);
+      await user.save();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+});
+
+router.route("/update/:id").post(checkUser, async (req, res) => {
+  const title = req.body.title;
+  const content = req.body.content;
+  const noteId = req.params.id;
+
+  if (req.Status) {
+    try {
+      const user = await User.findOne({ email:req.email }); // Find the user by email
+      if (!user) {
+        console.log("User not found");
+        return;
+      }
+
+      const note = user.notes.id(noteId); // Find the note by noteId within the user's notes array
+      if (!note) {
+        console.error("Note not found");
+      }
+
+      // Update the note with the updatedData
+      note.title = title;
+      note.content = content;
+
+      await user.save(); // Save the updated user object to the database
+
+      res.json({status:true});
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
+  }
+});
+
+router.route("/delete/:id").delete(checkUser, async (req, res) => {
+  const noteId = req.params.id;
+
+  if (req.Status) {
+    try {
+      const user = await User.findOne({ email: req.email });
+
+      if (!user) console.error("user not find");
+
+      const noteIndex = user.notes.findIndex(
+        (note) => note._id.toString() === noteId
+      );
+      if (noteIndex === -1) {
+        console.error("Note not found");
+      }
+      // Remove the note from the user's notes array
+      user.notes.splice(noteIndex, 1);
+
+      // Save the updated user
+      await user.save();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
 
 module.exports = router;

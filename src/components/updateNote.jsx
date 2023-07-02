@@ -1,10 +1,12 @@
 import React from "react";
 import { useState, useEffect } from 'react';
-import { useParams} from 'react-router-dom';
+import { useParams,useNavigate} from 'react-router-dom';
+
 import axios from 'axios';
 
 function UpdateNote() {
   const { id } = useParams();
+  const navigate = useNavigate();
   // const history = useHistory();
   const [note, setNote] = useState({
     title: '',
@@ -12,12 +14,12 @@ function UpdateNote() {
   });
 
   useEffect(()=>{
-    axios.get('http://localhost:5000/notes/'+id)
+    axios.get('http://localhost:5000/notes/'+id,{withCredentials:true})
     .then(response=>{
       setNote(response.data)
     })
     .catch(err=>console.log(err));
-  },[])
+  },[navigate])
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -31,11 +33,15 @@ function UpdateNote() {
     event.preventDefault();
 
     try {
-      await axios.post('http://localhost:5000/notes/update/'+id, note);
+      const {data}=await axios.post('http://localhost:5000/notes/update/'+id, note,{withCredentials:true});
+      if(data.status){
+        navigate("/home");
+      }
+      
     } catch (error) {
       console.log(error);
     }
-    window.location="/"; 
+    
   };
 
   return (

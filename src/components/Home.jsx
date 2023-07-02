@@ -1,23 +1,30 @@
 
-import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
 import axios from "axios";
+import { useCookies } from "react-cookie";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 function Home() {
     const [notes, setNotes] = useState([]);
-  
+    const [cookies, setCookie, removeCookie] = useCookies([]);
+    const navigate = useNavigate();
     useEffect(()=>{
-      axios.get('http://localhost:5000/notes')
+      if (!cookies.jwt) {
+        navigate("/");
+      }
+      axios.get('http://localhost:5000/notes',{
+        withCredentials: true,
+      })
       .then(response=>{
         setNotes(response.data)
       })
       .catch(err=>console.log(err));
-    },[])
+    },[cookies])
   
     function addNote(newNote) {
-      axios.post('http://localhost:5000/notes/add',newNote)
+      axios.post('http://localhost:5000/notes/add',newNote,{withCredentials:true})
       console.log(newNote);
       setNotes(prevNotes => {
         return [...prevNotes, newNote];
@@ -26,7 +33,7 @@ function Home() {
   
     function deleteNote(id) {
       
-      axios.delete('http://localhost:5000/notes/delete/'+id)
+      axios.delete('http://localhost:5000/notes/delete/'+id,{withCredentials:true})
       .then(res=>console.log(res.data))
       .catch(err=>console.log(err));
   
