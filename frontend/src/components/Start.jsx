@@ -47,6 +47,7 @@ function Start() {
     borderRadius: "5px",
     margin: "5px",
     cursor: "pointer",
+    fontSize:'30px'
   };
   const containerStyle = {
     display: "flex",
@@ -59,7 +60,7 @@ function Start() {
   return (
     <div style={containerStyle}>
       <div>
-        <h1 style={{ margin: 20, display: "block" }}>
+        <h1 style={{ margin: 20, display: "block",fontSize:'40px' }}>
           Welcome to notes making Application
         </h1>
       </div>

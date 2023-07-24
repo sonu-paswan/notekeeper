@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./Register.css"
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -39,47 +40,51 @@ function Login() {
       console.log(ex);
     }
   };
-  const containerStyle = {
-    display: "flex",
-    fontSize:20,
-    marginTop:100,
-    flexDirection:'column',
-    alignItems: "center",
-    
+  const buttonStyle = {
+    backgroundColor: 'white',
+    border: '2px solid #008CBA',
+    color: 'black',
+    padding: '2px 4px',
+    textAlign: 'center',
+    textDecoration: 'none',
+    display: 'inline-block',
+    fontSize: '16px',
+    margin: '2px 1px',
+    cursor: 'pointer',
   };
-  return (
-    <div style={containerStyle}>
-      <div><h2 style={{margin:20}}>Login into your account</h2></div>
-      <div><form onSubmit={(e) => handleSubmit(e)}>
-        <div style={{margin:5}}>
-          <label htmlFor="email">Email</label>
-          <input style={{fontSize:15}}
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={(e) =>
-              setValues({ ...values, [e.target.name]: e.target.value })
-            }
-          />
-        </div>
-        <div style={{margin:5}}>
-          <label htmlFor="password">Password</label>
-          <input style={{fontSize:15}}  
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={(e) =>
-              setValues({ ...values, [e.target.name]: e.target.value })
-            }
-          />
-        </div>
-        <button type="submit" style={{margin:5,fontSize:20}}>Submit</button>
-        <span>
+  return (  
+    <div className="container">
+      <div className="register-form">
+        <h2>Login here</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={values.email}
+              onChange={(e) => setValues({ ...values, email: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={values.password}
+              onChange={(e) =>
+                setValues({ ...values, password: e.target.value })
+              }
+            />
+          </div>
+          <button style={buttonStyle} type="submit">Submit</button>
+          <span style={{display:'block',margin:'5px'}}>
           Don't have an account ?<Link to="/register"> Register </Link>
         </span>
-      </form>
-     </div>
-      
+        </form>
+      </div>
     </div>
   );
 }
