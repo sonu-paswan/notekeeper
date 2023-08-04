@@ -40,7 +40,7 @@ function Start() {
     setisLoggedin(false);
   };
   const buttonStyle = {
-    backgroundColor: "blue",
+    backgroundColor: "#1874bf",
     color: "white",
     padding: "10px",
     border: "none",
@@ -66,7 +66,7 @@ function Start() {
       </div>
       {isLoggedin ? (
         <div>
-          <button style={buttonStyle} onClick={()=>{navigate("/home")}}>get started</button>
+          <button style={buttonStyle} onClick={()=>{navigate("/home")}}>Get started</button>
           <button style={buttonStyle} onClick={logOut}>Log out</button>
         </div>
       ) : (

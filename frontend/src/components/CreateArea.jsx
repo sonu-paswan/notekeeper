@@ -56,7 +56,7 @@ function CreateArea(props) {
           rows={isExpanded ? 3 : 1}
         />
         <Zoom in={isExpanded}>
-          <Fab onClick={submitNote}>
+          <Fab color="primary" aria-label="add" onClick={submitNote}>
             <AddIcon />
           </Fab>
         </Zoom>

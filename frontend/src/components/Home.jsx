@@ -3,7 +3,7 @@ import Note from "./Note";
 import CreateArea from "./CreateArea";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 function Home() {

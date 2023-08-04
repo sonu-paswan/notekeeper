@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import FormComponent from "./FormComponent";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
-import "./Register.css"
+import { useNavigate } from "react-router-dom";
+import "../css/Register.css";
 function Register() {
   const [cookies] = useCookies([]);
   const navigate = useNavigate();
@@ -13,9 +14,11 @@ function Register() {
   }, [cookies, navigate]);
 
   const [values, setValues] = useState({ email: "", password: "" });
-  const generateError = (error) =>console.log(error);
+  const [formEdited,setFormEdited] = useState(false);
+
+  const generateError = (error) => console.log(error);
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     try {
       const { data } = await axios.post(
         "http://localhost:5000/register",
@@ -37,53 +40,20 @@ function Register() {
       console.log(ex);
     }
   };
-  const buttonStyle = {
-    backgroundColor: 'white', 
-    border: '2px solid #008CBA',
-    color: 'black',
-    padding: '2px 4px',
-    textAlign: 'center',
-    textDecoration: 'none',
-    display: 'inline-block',
-    fontSize: '16px',
-    margin: '2px 1px',
-    cursor: 'pointer',
-  };
-  
+
+  useEffect(() => {
+    if (formEdited && values.email !== '' && values.password!=='') {
+      handleSubmit();
+    }
+  }, [values,formEdited]);
+
+  function handleChange(user) {
+    setValues(user);
+    setFormEdited(true);
+  }
+
   return (
-    <div className="container">
-      <div className="register-form">
-        <h2>Register here</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={values.email}
-              onChange={(e) => setValues({ ...values, email: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={values.password}
-              onChange={(e) =>
-                setValues({ ...values, password: e.target.value })
-              }
-            />
-          </div>
-          <button style={buttonStyle} type="submit">Submit</button>
-          <span style={{display:'block',margin:"5px"}}>
-            Already have an account? <a href="/login">Login</a>
-          </span>
-        </form>
-      </div>
-    </div>
+    <FormComponent onSubmitForm={handleChange} Reg={true} />
   );
 }
 
