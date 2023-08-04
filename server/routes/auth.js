@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt');
 const User = require('../models/notes.model');
 const {checkUser} = require("../middleware/authmiddleware")
 const router = require('express').Router();
-
+require('dotenv').config();
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
-  return jwt.sign({ id }, "sonu super secret key", {
+  return jwt.sign({ id }, process.env.secret_key, {
     expiresIn: maxAge,
   });
 };

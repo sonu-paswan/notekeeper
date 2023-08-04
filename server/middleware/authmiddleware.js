@@ -1,11 +1,11 @@
 const User = require("../models/notes.model");
 const jwt = require("jsonwebtoken");
-
+require('dotenv').config();
 module.exports.checkUser = async(req, res, next) => {
   const token = req.cookies.jwt;
   
   if (token) {
-    jwt.verify(token, "sonu super secret key", async (err, decodedToken) => {
+    jwt.verify(token, process.env.secret_key, async (err, decodedToken) => {
       if (err) {
         // res.json({ status: false });
         req.Status = false;
