@@ -5,6 +5,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import {useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import {API_URL} from "./config";
 
 function Home() {
     const [notes, setNotes] = useState([]);
@@ -14,7 +15,7 @@ function Home() {
       if (!cookies.jwt) {
         navigate("/");
       }
-      axios.get('http://localhost:5000/notes',{
+      axios.get(API_URL+'/notes',{
         withCredentials: true,
       })
       .then(response=>{
@@ -24,7 +25,7 @@ function Home() {
     },[cookies])
   
     function addNote(newNote) {
-      axios.post('http://localhost:5000/notes/add',newNote,{withCredentials:true})
+      axios.post(API_URL+'/notes/add',newNote,{withCredentials:true})
       console.log(newNote);
       setNotes(prevNotes => {
         return [...prevNotes, newNote];
@@ -33,7 +34,7 @@ function Home() {
   
     function deleteNote(id) {
       
-      axios.delete('http://localhost:5000/notes/delete/'+id,{withCredentials:true})
+      axios.delete(API_URL+'/notes/delete/'+id,{withCredentials:true})
       .then(res=>console.log(res.data))
       .catch(err=>console.log(err));
   

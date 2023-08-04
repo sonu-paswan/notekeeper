@@ -4,6 +4,7 @@ import axios from "axios";
 import "../css/Register.css";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import {API_URL} from "./config";
 
 function Login() {
   const [cookies] = useCookies([]);
@@ -23,7 +24,7 @@ function Login() {
     // event.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/login",
+        API_URL+"/login",
         {
           ...values,
         },

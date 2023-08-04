@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams,useNavigate} from 'react-router-dom';
 
 import axios from 'axios';
+import {API_URL} from "./config";
 
 function UpdateNote() {
   const { id } = useParams();
@@ -14,7 +15,7 @@ function UpdateNote() {
   });
 
   useEffect(()=>{
-    axios.get('http://localhost:5000/notes/'+id,{withCredentials:true})
+    axios.get(API_URL+'/notes/'+id,{withCredentials:true})
     .then(response=>{
       setNote(response.data)
     })
@@ -33,7 +34,7 @@ function UpdateNote() {
     event.preventDefault();
 
     try {
-      const {data}=await axios.post('http://localhost:5000/notes/update/'+id, note,{withCredentials:true});
+      const {data}=await axios.post(API_URL+'/notes/update/'+id, note,{withCredentials:true});
       if(data.status){
         navigate("/home");
       }
