@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // mongoose connect 
-// const uri = 'mongodb://127.0.0.1:27017/notekeeper';
+
 const uri = process.env.ATLAS_URI;
 
 mongoose.connect(uri,{useNewUrlParser:true})
