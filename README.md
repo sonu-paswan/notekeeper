@@ -23,6 +23,9 @@ npm install
 
 ### In notekeeper folder just type the command to start reactJS
 ```
+cd frontend
+```
+```
 npm start
 ```
 ### And open another terminal for the server by typing the following command in notekeeper folder 
