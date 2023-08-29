@@ -46,7 +46,8 @@ router.route("/add").post(checkUser, async (req, res) => {
       if (!user) console.error("user not find");
 
       user.notes.push(note);
-      await user.save();
+      const newnote=await user.save();
+      res.json(newnote.notes.slice(-1)[0]);
     } catch (err) {
       console.log(err);
     }

@@ -26,10 +26,12 @@ function Home() {
   
     function addNote(newNote) {
       axios.post(API_URL+'/notes/add',newNote,{withCredentials:true})
-      console.log(newNote);
-      setNotes(prevNotes => {
-        return [...prevNotes, newNote];
-      });
+      .then(response=>{
+        console.log(response.data);
+        setNotes(prevNotes => {
+          return [...prevNotes, response.data];
+        });
+      })
     }
   
     function deleteNote(id) {
