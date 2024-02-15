@@ -11,7 +11,7 @@ const auth = require('./routes/auth');
 
 // middle wares
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://notekeeper-frontend.onrender.com"],
     methods: ["GET", "POST", "DELETE"],
     credentials: true,
   }));
